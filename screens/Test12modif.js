@@ -34,33 +34,6 @@ export default function Test12modif({ route, navigation }) {
   const [tapIsActive, setTapIsActive] = useState(true);
   const [currentActionType, setCurrentActionType] = useState(null);
 
-  // console.log(`defaultColors: ${defaultColors}`);
-  // console.log(route.params);
-  // const circleRadiusMiddle = 50;
-  // const circleRadiusInner = 25; // this can change no problem
-  // const circleRadiusOuter = 175; // this needs to be twice the circleRadiusMiddle
-  // const numTrianglesMiddle = 5;
-  // const numTrianglesOuter = 10;
-
-  // const defaultColors = {
-  //   1: "rgba(125, 150, 100, 0.5)", // right
-  //   2: "rgba(150, 100, 125, 0.25)", // bottom
-  //   3: "rgba(150, 100, 125, 0.25)", // bottombottomleft
-  //   4: "rgba(125, 100, 150, 0.25)",
-  //   5: "rgba(150, 100, 125, 0.25)", // bottombottomleft
-  //   6: "rgba(125, 100, 150, 0.25)",
-  //   7: "rgba(150, 100, 125, 0.25)", // bottombottomleft
-  //   8: "rgba(125, 100, 150, 0.25)",
-  //   9: "rgba(150, 100, 125, 0.25)", // bottombottomleft
-  //   10: "rgba(125, 100, 150, 0.25)",
-  //   11: "rgba(150, 100, 125, 0.25)", // bottombottomleft
-  //   12: "rgba(125, 100, 150, 0.25)",
-  //   13: "rgba(150, 100, 125, 0.25)", // bottombottomleft
-  //   14: "rgba(125, 100, 150, 0.25)",
-  //   15: "rgba(150, 100, 125, 0.25)", // bottombottomleft
-  //   16: "rgba(125, 100, 150, 0.25)",
-  //   center: "gray",
-  // };
   const [swipeColorDict, setSwipeColorDict] = useState(defaultColors);
 
   const calculateDistanceFromCenter = (swipePosX, swipePosY) => {
@@ -144,7 +117,7 @@ export default function Test12modif({ route, navigation }) {
   const gestureTapOnEnd = Gesture.Tap()
     .maxDuration(2000)
     .onEnd((event) => {
-      console.log("- tap on end");
+      // console.log("- tap on end");
       const { x, y, absoluteX, absoluteY } = event;
 
       const swipePosX = calculatePadPositionCenter(x, y).x;

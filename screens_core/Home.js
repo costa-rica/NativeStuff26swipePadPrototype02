@@ -82,7 +82,7 @@ export default function Home({ navigation }) {
   const [swipeColorDict, setSwipeColorDict] = useState(defaultColors);
 
   const handleChoice = (option) => {
-    console.log("picked something");
+    // console.log("picked something");
     setDemoOption(option);
     if (option == "5-10") {
       setNumTrianglesMiddle(5);
