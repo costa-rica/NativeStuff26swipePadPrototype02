@@ -30,8 +30,8 @@ export default function Home({ navigation }) {
   // const [actionList, setActionList] = useState([]);
 
   const [padVisible, setPadVisible] = useState(true);
-  const [padPositionCenter, setPadPositionCenter] = useState({ x: 0, y: 0 });
-  const [actionList, setActionList] = useState([]);
+  // const [padPositionCenter, setPadPositionCenter] = useState({ x: 0, y: 0 });
+  // const [actionList, setActionList] = useState([]);
   const swipePadStartX = Dimensions.get("window").width / 3;
   const swipePadStartY = Dimensions.get("window").height / 3.5;
   const [tapDetails, setTapDetails] = useState({
@@ -70,7 +70,7 @@ export default function Home({ navigation }) {
   const [swipeColorDict, setSwipeColorDict] = useState(defaultColors);
 
   const handleChoice = (option) => {
-    console.log("picked somethinge");
+    console.log("picked something");
     setDemoOption(option);
   };
 
@@ -288,11 +288,11 @@ export default function Home({ navigation }) {
     }
   });
 
-  const styleVwMainPosition = {
-    // position: "absolute",
-    // left: padPositionCenter.x, // Center modal horizontally
-    // top: padPositionCenter.y, // Center modal vertically
-  };
+  // const styleVwMainPosition = {
+  //   // position: "absolute",
+  //   // left: padPositionCenter.x, // Center modal horizontally
+  //   // top: padPositionCenter.y, // Center modal vertically
+  // };
 
   const styleVwSwipePad = {
     position: "absolute",
@@ -326,6 +326,7 @@ export default function Home({ navigation }) {
     );
   };
 
+  // console.log(`circleRadiusInner: ${circleRadiusInner}`);
   return (
     <GestureHandlerRootView
       style={{
@@ -354,11 +355,11 @@ export default function Home({ navigation }) {
 
               <ButtonKv
                 colorBackground={"blue"}
-                width={50}
-                onPress={() => handleChoice(2)}
-                selected={demoOption == 2}
+                width={60}
+                onPress={() => handleChoice("5-10")}
+                selected={demoOption == "5-10"}
               >
-                2
+                5-10
               </ButtonKv>
               <ButtonKv
                 colorBackground={"blue"}
@@ -432,12 +433,21 @@ export default function Home({ navigation }) {
             <View style={{ padding: 20 }}>
               {demoOption != 0 ? (
                 <BtnHomNav
-                  goTo={"GestureScreen08"}
+                  goTo={"Test12modif"}
                   title={"Go to Touch Pad Screen ➡️"}
                   // description={"use location to display swipe pad"}
                   navigation={navigation}
                   // modalRadius={modalRadius}
                   demoOption={demoOption}
+                  circleRadiusInner={circleRadiusInner}
+                  circleRadiusMiddle={circleRadiusMiddle}
+                  // styleVwMainPosition={styleVwMainPosition}
+                  // swipeColorDict={swipeColorDict}
+                  // setSwipeColorDict={setSwipeColorDict}
+                  defaultColors={defaultColors}
+                  circleRadiusOuter={circleRadiusOuter}
+                  numTrianglesMiddle={numTrianglesMiddle}
+                  numTrianglesOuter={numTrianglesOuter}
                 />
               ) : (
                 <Text style={{ fontSize: 20 }}>Select a type</Text>
@@ -449,13 +459,15 @@ export default function Home({ navigation }) {
             >
               {padVisible && (
                 <SwipePad
-                  circleRadiusInner={circleRadiusInner}
-                  circleRadiusMiddle={circleRadiusMiddle}
-                  styleVwMainPosition={styleVwMainPosition}
-                  swipeColorDict={swipeColorDict}
-                  circleRadiusOuter={circleRadiusOuter}
                   numTrianglesMiddle={numTrianglesMiddle}
                   numTrianglesOuter={numTrianglesOuter}
+                  circleRadiusInner={circleRadiusInner}
+                  circleRadiusMiddle={circleRadiusMiddle}
+                  styleVwMainPosition={{}}
+                  circleRadiusOuter={circleRadiusOuter}
+                  swipeColorDict={swipeColorDict}
+                  setSwipeColorDict={setSwipeColorDict}
+                  defaultColors={defaultColors}
                 />
               )}
             </View>
