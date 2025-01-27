@@ -484,7 +484,8 @@ export default function Home({ navigation }) {
       {/* <SafeAreaView style={{ flex: 1 }}> */}
       <View style={styles.container}>
         <View style={styles.vwTitle}>
-          <Text style={styles.txtTitle}>Swipe Pad Demo</Text>
+          <Text style={styles.txtTitle}>Swipe Pad Demo </Text>
+          <Text style={{ textAlign: "center" }}>Prototype 03 </Text>
         </View>
         <View
           style={{
