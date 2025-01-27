@@ -82,7 +82,10 @@ export default function SwipePad(props) {
       setRotateOuter(true);
       setRotateMiddle(false);
       // console.log("triggered rotateOuter");
-    } else if (props.numTrianglesMiddle === 4) {
+    } else if (
+      props.numTrianglesMiddle === 4 &&
+      props.numTrianglesOuter == 12
+    ) {
       setRotateOuter(true);
       setRotateMiddle(true);
     } else {

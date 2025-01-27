@@ -20,18 +20,20 @@ import {
 } from "react-native-gesture-handler";
 
 export default function Home({ navigation }) {
-  const [demoOption, setDemoOption] = useState("5-10"); // 2, 4-8, 5-10, or 4-12
-  const [numTrianglesMiddle, setNumTrianglesMiddle] = useState(5); // 2, 4, or 5
-  const [numTrianglesOuter, setNumTrianglesOuter] = useState(10); // 8, 10 or 12
+  const [demoOption, setDemoOption] = useState("4-8"); // 2, 4-8, 5-10, or 4-12
+  const [numTrianglesMiddle, setNumTrianglesMiddle] = useState(4); // 2, 4, or 5
+  const [numTrianglesOuter, setNumTrianglesOuter] = useState(8); // 8, 10 or 12
   const [circleRadiusOuter, setCircleRadiusOuter] = useState(100);
   const [circleRadiusMiddle, setCircleRadiusMiddle] = useState(50);
   const [circleRadiusInner, setCircleRadiusInner] = useState(25);
 
   const [padVisible, setPadVisible] = useState(true);
-  // const [padPositionCenter, setPadPositionCenter] = useState({ x: 0, y: 0 });
-  // const [actionList, setActionList] = useState([]);
-  const swipePadStartX = Dimensions.get("window").width / 3;
-  const swipePadStartY = Dimensions.get("window").height / 3.5;
+
+  const [swipePadStartX, setSwipePadStartX] = useState(0);
+  const [swipePadStartY, setSwipePadStartY] = useState(0);
+  // const swipePadStartY = 0;
+  // const swipePadStartX = Dimensions.get("window").width / 3;
+  // const swipePadStartY = Dimensions.get("window").height / 3.5 + 100;
   const [tapDetails, setTapDetails] = useState({
     timestamp: "no date",
     padPosCenterX: swipePadStartX + circleRadiusOuter / 2 - 2.5,
@@ -45,7 +47,19 @@ export default function Home({ navigation }) {
   //const circleRadiusOuter = 125; // this needs to be twice the circleRadiusMiddle
   // const numTrianglesMiddle = 5;
   // const numTrianglesOuter = 10;
-
+  const handleStyleVwSwipePadOnLayout = (event) => {
+    const { x, y, width, height } = event.nativeEvent.layout;
+    // console.log(`x:${x}, y:${y}`);
+    setSwipePadStartX(x);
+    setSwipePadStartY(y);
+    setTapDetails({
+      timestamp: "",
+      padPosCenterX: x + width / 2,
+      padPosCenterY: y + height / 2,
+      // padPosCenterX: x + width / 2 + circleRadiusOuter / 2 - 2.5,
+      // padPosCenterY: y + circleRadiusOuter / 2 - 2.5,
+    });
+  };
   const defaultColors = {
     1: "rgba(125, 150, 100, 0.8)", // right
     2: "rgba(150, 100, 125, 0.8)", // bottom
@@ -78,16 +92,15 @@ export default function Home({ navigation }) {
       setNumTrianglesMiddle(4);
       setNumTrianglesOuter(12);
       // need to adjust degrees rotation in two places
+    } else if (option == "4-8") {
+      setNumTrianglesMiddle(4);
+      setNumTrianglesOuter(8);
+      // need to adjust degrees rotation in two places
     }
   };
 
   const onChangeSizeCircleOuter = (newSize) => {
     setCircleRadiusOuter(newSize);
-    setTapDetails({
-      timestamp: "",
-      padPosCenterX: swipePadStartX + newSize / 2 - 2.5,
-      padPosCenterY: swipePadStartY + newSize / 2 - 2.5,
-    });
   };
 
   // Function to temporarily change color
@@ -162,8 +175,80 @@ export default function Home({ navigation }) {
           relativeToPadCenterY,
           inMiddleCircle
         );
+      if (demoOption === "4-8")
+        logicFourEightCircle(
+          relativeToPadCenterX,
+          relativeToPadCenterY,
+          inMiddleCircle
+        );
     }
   });
+
+  const logicFourEightCircle = (
+    relativeToPadCenterX,
+    relativeToPadCenterY,
+    inMiddleCircle
+  ) => {
+    const boundary45 = relativeToPadCenterX * Math.tan((Math.PI / 180) * 45);
+    // console.log(
+    //   `relativeX: ${relativeToPadCenterX}, relativeY: ${relativeToPadCenterY}, b45:${boundary45}`
+    // );
+    if (relativeToPadCenterX > 0 && relativeToPadCenterY > 0) {
+      // Bottom Right
+      handleSwipeColorChange(1);
+      setCurrentActionType(1);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY < boundary45) {
+          handleSwipeColorChange(1, 5);
+          setCurrentActionType(5);
+        } else {
+          handleSwipeColorChange(1, 6);
+          setCurrentActionType(6);
+        }
+      }
+    } else if (relativeToPadCenterX < 0 && relativeToPadCenterY > 0) {
+      // Bottom Left
+      handleSwipeColorChange(2);
+      setCurrentActionType(2);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > Math.abs(boundary45)) {
+          handleSwipeColorChange(2, 7);
+          setCurrentActionType(7);
+        } else {
+          handleSwipeColorChange(2, 8);
+          setCurrentActionType(8);
+        }
+      }
+    } else if (relativeToPadCenterX < 0 && relativeToPadCenterY < 0) {
+      // Top Right
+      handleSwipeColorChange(3);
+      setCurrentActionType(3);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary45) {
+          handleSwipeColorChange(3, 9);
+          setCurrentActionType(9);
+        } else {
+          handleSwipeColorChange(3, 10);
+          setCurrentActionType(10);
+        }
+      }
+    } else if (relativeToPadCenterX > 0 && relativeToPadCenterY < 0) {
+      // Top Right
+      handleSwipeColorChange(4);
+      setCurrentActionType(4);
+      if (!inMiddleCircle) {
+        if (Math.abs(relativeToPadCenterY) > boundary45) {
+          handleSwipeColorChange(4, 11);
+          setCurrentActionType(11);
+        } else {
+          handleSwipeColorChange(4, 12);
+          setCurrentActionType(12);
+        }
+      }
+    } else {
+      setSwipeColorDict(defaultColors);
+    }
+  };
 
   const logicFiveTenCircle = (
     relativeToPadCenterX,
@@ -357,18 +442,21 @@ export default function Home({ navigation }) {
   };
 
   const styleVwSwipePad = {
-    position: "absolute",
-    top: swipePadStartY - circleRadiusOuter / 2,
-    left: swipePadStartX - circleRadiusOuter / 2,
+    flex: 1,
+    justifyContent: "center",
+    // backgroundColor: "green",
+    // position: "absolute",
+    // top: swipePadStartY - circleRadiusOuter / 2,
+    // left: swipePadStartX - circleRadiusOuter / 2,
   };
-  const styleVwTapDetails = {
-    width: 5,
-    height: 5,
-    backgroundColor: "black",
-    position: "absolute",
-    top: tapDetails.padPosCenterY,
-    left: tapDetails.padPosCenterX,
-  };
+  // const styleVwTapDetails = {
+  //   width: 5,
+  //   height: 5,
+  //   backgroundColor: "black",
+  //   position: "absolute",
+  //   top: tapDetails.padPosCenterY,
+  //   left: tapDetails.padPosCenterX,
+  // };
 
   const calculatePadPositionCenter = (x, y) => {
     const centeredX = x;
@@ -408,7 +496,14 @@ export default function Home({ navigation }) {
           }}
         >
           <Text style={{ fontSize: 20 }}> Choose type:</Text>
-
+          <ButtonKv
+            colorBackground={"blue"}
+            width={60}
+            onPress={() => handleChoice("4-8")}
+            selected={demoOption == "4-8"}
+          >
+            4-8
+          </ButtonKv>
           <ButtonKv
             colorBackground={"blue"}
             width={60}
@@ -425,25 +520,28 @@ export default function Home({ navigation }) {
           >
             4-12
           </ButtonKv>
-          <ButtonKv
-            colorBackground={"blue"}
-            width={50}
-            onPress={() => handleChoice(5)}
-            selected={demoOption == 5}
-          >
-            5
-          </ButtonKv>
-          <ButtonKv
-            colorBackground={demoOption == 7 ? "red" : "blue"}
-            width={50}
-            onPress={() => handleChoice(7)}
-            selected={demoOption == 7}
-          >
-            7
-          </ButtonKv>
         </View>
-        <View style={{ flex: 1 }} />
-
+        {/* <View style={{ flex: 1 }} /> */}
+        <GestureDetector gesture={gestureSwipeOnChange}>
+          <View
+            style={styleVwSwipePad}
+            onLayout={(event) => handleStyleVwSwipePadOnLayout(event)}
+          >
+            {padVisible && (
+              <SwipePad
+                numTrianglesMiddle={numTrianglesMiddle}
+                numTrianglesOuter={numTrianglesOuter}
+                circleRadiusInner={circleRadiusInner}
+                circleRadiusMiddle={circleRadiusMiddle}
+                styleVwMainPosition={{}}
+                circleRadiusOuter={circleRadiusOuter}
+                swipeColorDict={swipeColorDict}
+                setSwipeColorDict={setSwipeColorDict}
+                defaultColors={defaultColors}
+              />
+            )}
+          </View>
+        </GestureDetector>
         <View style={styles.vwSlider}>
           <Text style={styles.txtLabel}>
             Adjust OuterRadius: {circleRadiusOuter}
@@ -514,23 +612,7 @@ export default function Home({ navigation }) {
             <Text style={{ fontSize: 20 }}>Select a type</Text>
           )}
         </View>
-        <GestureDetector gesture={gestureSwipeOnChange}>
-          <View style={styleVwSwipePad}>
-            {padVisible && (
-              <SwipePad
-                numTrianglesMiddle={numTrianglesMiddle}
-                numTrianglesOuter={numTrianglesOuter}
-                circleRadiusInner={circleRadiusInner}
-                circleRadiusMiddle={circleRadiusMiddle}
-                styleVwMainPosition={{}}
-                circleRadiusOuter={circleRadiusOuter}
-                swipeColorDict={swipeColorDict}
-                setSwipeColorDict={setSwipeColorDict}
-                defaultColors={defaultColors}
-              />
-            )}
-          </View>
-        </GestureDetector>
+
         {/* <View style={styleVwTapDetails}></View> */}
       </View>
       {/* </SafeAreaView> */}
