@@ -1,8 +1,11 @@
-# React Native Stuff 25 Swipe Pad Prototype 02
+# React Native Stuff 26 Swipe Pad Prototype 02
 
 ## Description
 
 Swipe pad prototype version 02
+
+- ** For Distribution **
+- based on the [Native Stuff _25_ repo](https://github.com/costa-rica/NativeStuff25swipePadPrototype02.git)
 
 ## Installations
 

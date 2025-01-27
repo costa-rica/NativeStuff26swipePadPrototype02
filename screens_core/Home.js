@@ -20,14 +20,12 @@ import {
 } from "react-native-gesture-handler";
 
 export default function Home({ navigation }) {
-  const [demoOption, setDemoOption] = useState(2); // 2, 5, 7
-  // const [modalRadius, setModalRadius] = useState(100);
+  const [demoOption, setDemoOption] = useState(2); // 2, 4-8, 5-10, or 4-12
+  const [numTrianglesMiddle, setNumTrianglesMiddle] = useState(5); // 2, 4, or 5
+  const [numTrianglesOuter, setNumTrianglesOuter] = useState(10); // 8, 10 or 12
   const [circleRadiusOuter, setCircleRadiusOuter] = useState(100);
   const [circleRadiusMiddle, setCircleRadiusMiddle] = useState(50);
   const [circleRadiusInner, setCircleRadiusInner] = useState(25);
-  // const [modalVisible, setModalVisible] = useState(false);
-  // const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-  // const [actionList, setActionList] = useState([]);
 
   const [padVisible, setPadVisible] = useState(true);
   // const [padPositionCenter, setPadPositionCenter] = useState({ x: 0, y: 0 });
@@ -39,14 +37,14 @@ export default function Home({ navigation }) {
     padPosCenterX: swipePadStartX + circleRadiusOuter / 2 - 2.5,
     padPosCenterY: swipePadStartY + circleRadiusOuter / 2 - 2.5,
   });
-  const [tapIsActive, setTapIsActive] = useState(true);
+  // const [tapIsActive, setTapIsActive] = useState(true);
   const [currentActionType, setCurrentActionType] = useState(null);
 
   // const circleRadiusMiddle = 50;
   //const circleRadiusInner = 25; // this can change no problem
   //const circleRadiusOuter = 125; // this needs to be twice the circleRadiusMiddle
-  const numTrianglesMiddle = 5;
-  const numTrianglesOuter = 10;
+  // const numTrianglesMiddle = 5;
+  // const numTrianglesOuter = 10;
 
   const defaultColors = {
     1: "rgba(125, 150, 100, 0.5)", // right
@@ -72,6 +70,15 @@ export default function Home({ navigation }) {
   const handleChoice = (option) => {
     console.log("picked something");
     setDemoOption(option);
+    if (option == "5-10") {
+      setNumTrianglesMiddle(5);
+      setNumTrianglesOuter(10);
+      // need to adjust degrees rotation
+    } else if (option == "4-12") {
+      setNumTrianglesMiddle(4);
+      setNumTrianglesOuter(12);
+      // need to adjust degrees rotation in two places
+    }
   };
 
   const onChangeSizeCircleOuter = (newSize) => {

@@ -175,6 +175,7 @@ export default function Test12modif({ route, navigation }) {
     const relativeToPadCenterY = swipePosY - tapDetails.padPosCenterY;
 
     const inInnerCircle = distanceFromCenter < circleRadiusInner;
+    const inMiddleCircle = distanceFromCenter < circleRadiusMiddle;
 
     // Y dependent
     const boundary345Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 345); // sector 1 beginning
@@ -200,12 +201,14 @@ export default function Test12modif({ route, navigation }) {
         handleSwipeColorChange(1);
         setCurrentActionType(1);
 
-        if (relativeToPadCenterY < boundary21Y) {
-          handleSwipeColorChange(1, 6);
-          setCurrentActionType(6);
-        } else {
-          handleSwipeColorChange(1, 7);
-          setCurrentActionType(7);
+        if (!inMiddleCircle) {
+          if (relativeToPadCenterY < boundary21Y) {
+            handleSwipeColorChange(1, 6);
+            setCurrentActionType(6);
+          } else {
+            handleSwipeColorChange(1, 7);
+            setCurrentActionType(7);
+          }
         }
       } else if (
         relativeToPadCenterY > boundary57Y &&
@@ -214,13 +217,14 @@ export default function Test12modif({ route, navigation }) {
         // Bottom (sector 2)
         handleSwipeColorChange(2);
         setCurrentActionType(2);
-
-        if (relativeToPadCenterY > boundary93Y) {
-          handleSwipeColorChange(2, 8);
-          setCurrentActionType(8);
-        } else {
-          handleSwipeColorChange(2, 9);
-          setCurrentActionType(9);
+        if (!inMiddleCircle) {
+          if (relativeToPadCenterY > boundary93Y) {
+            handleSwipeColorChange(2, 8);
+            setCurrentActionType(8);
+          } else {
+            handleSwipeColorChange(2, 9);
+            setCurrentActionType(9);
+          }
         }
       }
       //
@@ -231,14 +235,15 @@ export default function Test12modif({ route, navigation }) {
         // Left
         handleSwipeColorChange(3);
         setCurrentActionType(3);
-
-        if (relativeToPadCenterY > boundary165Y) {
-          // line that splits the the outer sectors and cuts the middle sector in half
-          handleSwipeColorChange(3, 10);
-          setCurrentActionType(10);
-        } else {
-          handleSwipeColorChange(3, 11);
-          setCurrentActionType(11);
+        if (!inMiddleCircle) {
+          if (relativeToPadCenterY > boundary165Y) {
+            // line that splits the the outer sectors and cuts the middle sector in half
+            handleSwipeColorChange(3, 10);
+            setCurrentActionType(10);
+          } else {
+            handleSwipeColorChange(3, 11);
+            setCurrentActionType(11);
+          }
         }
       }
       //
@@ -250,24 +255,27 @@ export default function Test12modif({ route, navigation }) {
         // Top Left
         handleSwipeColorChange(4);
         setCurrentActionType(4);
-
-        if (relativeToPadCenterY > boundary237Y) {
-          handleSwipeColorChange(4, 12);
-          setCurrentActionType(12);
-        } else {
-          handleSwipeColorChange(4, 13);
-          setCurrentActionType(13);
+        if (!inMiddleCircle) {
+          if (relativeToPadCenterY > boundary237Y) {
+            handleSwipeColorChange(4, 12);
+            setCurrentActionType(12);
+          } else {
+            handleSwipeColorChange(4, 13);
+            setCurrentActionType(13);
+          }
         }
       } else {
         // setSwipeColorDict(defaultColors);
         handleSwipeColorChange(5);
         setCurrentActionType(5);
-        if (relativeToPadCenterY < boundary309Y) {
-          handleSwipeColorChange(5, 14);
-          setCurrentActionType(14);
-        } else {
-          handleSwipeColorChange(5, 15);
-          setCurrentActionType(15);
+        if (!inMiddleCircle) {
+          if (relativeToPadCenterY < boundary309Y) {
+            handleSwipeColorChange(5, 14);
+            setCurrentActionType(14);
+          } else {
+            handleSwipeColorChange(5, 15);
+            setCurrentActionType(15);
+          }
         }
       }
     }
