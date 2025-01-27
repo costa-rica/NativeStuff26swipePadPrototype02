@@ -8,6 +8,10 @@ Swipe pad prototype version 03
 - based on the [Native Stuff _25_ repo](https://github.com/costa-rica/NativeStuff25swipePadPrototype02.git)
 - was misnamed prototype02, but this and NativeStuff25 should be prototype03
 
+## Demo
+
+![prototype03demo.gif](/docs/prototype03demo.gif)
+
 ## Installations
 
 1. Navigation
