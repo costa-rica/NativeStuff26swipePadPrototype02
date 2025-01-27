@@ -30,3 +30,6 @@ npx expo install react-native-screens react-native-safe-area-context
 ### Test12modif
 
 Keeping this Test12 screen name because it will reference the NativeStuff23oneActionGeometry project where this methodology came from. The original file name was "Test12.js".
+
+- use logic for all three types 4-8, 5-10, and 4-12 from this project
+  - in Home.js and Test12modif.js
