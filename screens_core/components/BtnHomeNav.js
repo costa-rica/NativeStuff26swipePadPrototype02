@@ -1,5 +1,10 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 
 export default function BtnHomeNav(props) {
   // console.log(props.setSwipeColorDict);
@@ -37,7 +42,7 @@ const styles = StyleSheet.create({
   touchOpNav: {
     backgroundColor: "black",
     padding: 5,
-    width: 250,
+    width: Dimensions.get("window").width * 0.8,
     borderRadius: 12,
     marginBottom: 1,
   },
