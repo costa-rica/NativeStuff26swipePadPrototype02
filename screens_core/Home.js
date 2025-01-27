@@ -20,7 +20,7 @@ import {
 } from "react-native-gesture-handler";
 
 export default function Home({ navigation }) {
-  const [demoOption, setDemoOption] = useState(2); // 2, 4-8, 5-10, or 4-12
+  const [demoOption, setDemoOption] = useState("5-10"); // 2, 4-8, 5-10, or 4-12
   const [numTrianglesMiddle, setNumTrianglesMiddle] = useState(5); // 2, 4, or 5
   const [numTrianglesOuter, setNumTrianglesOuter] = useState(10); // 8, 10 or 12
   const [circleRadiusOuter, setCircleRadiusOuter] = useState(100);
@@ -130,8 +130,10 @@ export default function Home({ navigation }) {
   const gestureSwipeOnChange = Gesture.Pan().onChange((event) => {
     const { x, y, translationX, translationY, absoluteX, absoluteY } = event;
 
-    const swipePosX = calculatePadPositionCenter(x, y).x;
-    const swipePosY = calculatePadPositionCenter(x, y).y;
+    // const swipePosX = calculatePadPositionCenter(x, y).x;
+    // const swipePosY = calculatePadPositionCenter(x, y).y;
+    const swipePosX = calculatePadPositionCenter(absoluteX, absoluteY).x;
+    const swipePosY = calculatePadPositionCenter(absoluteX, absoluteY).y;
 
     const distanceFromCenter = calculateDistanceFromCenter(
       swipePosX,
@@ -143,22 +145,6 @@ export default function Home({ navigation }) {
 
     const inInnerCircle = distanceFromCenter < circleRadiusInner;
     const inMiddleCircle = distanceFromCenter < circleRadiusMiddle;
-
-    // console.log(
-    //   `circle x: ${tapDetails.padPosCenterX}, y:${tapDetails.padPosCenterY}`
-    // );
-
-    // // Y dependent
-    // const boundary345Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 345); // sector 1 beginning
-    // const boundary57Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 57); // sector 1 end sector 2 begin
-    // const boundary21Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 21); // sector 1-1 end 1-2 begin
-    // const boundary129Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 129); // sector 2 end 3begin
-    // const boundary93Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 93); // splits sector 2
-    // const boundary201Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 201); // sector 3-1 top end
-    // const boundary165Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 165); // sector 3-1 top end
-    // const boundary273Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 273); // sector 4 end 5 begin
-    // const boundary237Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 237); // splits sector 4
-    // const boundary309Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 309); // splits sector 5
 
     if (inInnerCircle) {
       handleSwipeColorChange("center");
@@ -407,129 +393,128 @@ export default function Home({ navigation }) {
         // width: "100%",
       }}
     >
-      <GestureDetector gesture={gestureSwipeOnChange}>
-        {/* <SafeAreaView style={{ flex: 1 }}> */}
-        <View style={styles.container}>
-          <View style={styles.vwTitle}>
-            <Text style={styles.txtTitle}>Swipe Pad Demo</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 5,
-              width: Dimensions.get("window").width * 0.9,
-            }}
+      {/* <SafeAreaView style={{ flex: 1 }}> */}
+      <View style={styles.container}>
+        <View style={styles.vwTitle}>
+          <Text style={styles.txtTitle}>Swipe Pad Demo</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 5,
+            width: Dimensions.get("window").width * 0.9,
+          }}
+        >
+          <Text style={{ fontSize: 20 }}> Choose type:</Text>
+
+          <ButtonKv
+            colorBackground={"blue"}
+            width={60}
+            onPress={() => handleChoice("5-10")}
+            selected={demoOption == "5-10"}
           >
-            <Text style={{ fontSize: 20 }}> Choose type:</Text>
+            5-10
+          </ButtonKv>
+          <ButtonKv
+            colorBackground={"blue"}
+            width={60}
+            onPress={() => handleChoice("4-12")}
+            selected={demoOption == "4-12"}
+          >
+            4-12
+          </ButtonKv>
+          <ButtonKv
+            colorBackground={"blue"}
+            width={50}
+            onPress={() => handleChoice(5)}
+            selected={demoOption == 5}
+          >
+            5
+          </ButtonKv>
+          <ButtonKv
+            colorBackground={demoOption == 7 ? "red" : "blue"}
+            width={50}
+            onPress={() => handleChoice(7)}
+            selected={demoOption == 7}
+          >
+            7
+          </ButtonKv>
+        </View>
+        <View style={{ flex: 1 }} />
 
-            <ButtonKv
-              colorBackground={"blue"}
-              width={60}
-              onPress={() => handleChoice("5-10")}
-              selected={demoOption == "5-10"}
-            >
-              5-10
-            </ButtonKv>
-            <ButtonKv
-              colorBackground={"blue"}
-              width={60}
-              onPress={() => handleChoice("4-12")}
-              selected={demoOption == "4-12"}
-            >
-              4-12
-            </ButtonKv>
-            <ButtonKv
-              colorBackground={"blue"}
-              width={50}
-              onPress={() => handleChoice(5)}
-              selected={demoOption == 5}
-            >
-              5
-            </ButtonKv>
-            <ButtonKv
-              colorBackground={demoOption == 7 ? "red" : "blue"}
-              width={50}
-              onPress={() => handleChoice(7)}
-              selected={demoOption == 7}
-            >
-              7
-            </ButtonKv>
-          </View>
-          <View style={{ flex: 1 }} />
+        <View style={styles.vwSlider}>
+          <Text style={styles.txtLabel}>
+            Adjust OuterRadius: {circleRadiusOuter}
+          </Text>
 
-          <View style={styles.vwSlider}>
-            <Text style={styles.txtLabel}>
-              Adjust OuterRadius: {circleRadiusOuter}
-            </Text>
+          <Slider
+            style={{ width: 300, height: 20 }}
+            minimumValue={50}
+            maximumValue={200}
+            step={1}
+            value={circleRadiusOuter}
+            onValueChange={(value) => {
+              onChangeSizeCircleOuter(value);
+            }}
+            minimumTrackTintColor="#1EB1FC"
+            maximumTrackTintColor="#8E8E93"
+            thumbTintColor="#1EB1FC"
+          />
+          <Text style={styles.txtLabel}>
+            Adjust Middle : {circleRadiusOuter}
+          </Text>
 
-            <Slider
-              style={{ width: 300, height: 20 }}
-              minimumValue={50}
-              maximumValue={200}
-              step={1}
-              value={circleRadiusOuter}
-              onValueChange={(value) => {
-                onChangeSizeCircleOuter(value);
-              }}
-              minimumTrackTintColor="#1EB1FC"
-              maximumTrackTintColor="#8E8E93"
-              thumbTintColor="#1EB1FC"
+          <Slider
+            style={{ width: 300, height: 20 }}
+            minimumValue={25}
+            maximumValue={100}
+            step={1}
+            value={circleRadiusMiddle}
+            onValueChange={(value) => {
+              setCircleRadiusMiddle(value);
+            }}
+            minimumTrackTintColor="#1EB1FC"
+            maximumTrackTintColor="#8E8E93"
+            thumbTintColor="#1EB1FC"
+          />
+          <Text style={styles.txtLabel}>Center : {circleRadiusInner}</Text>
+
+          <Slider
+            style={{ width: 300, height: 20 }}
+            minimumValue={5}
+            maximumValue={50}
+            step={1}
+            value={circleRadiusInner}
+            onValueChange={(value) => {
+              setCircleRadiusInner(value);
+            }}
+            minimumTrackTintColor="#1EB1FC"
+            maximumTrackTintColor="#8E8E93"
+            thumbTintColor="#1EB1FC"
+          />
+        </View>
+
+        <View style={{ padding: 20 }}>
+          {demoOption != 0 ? (
+            <BtnHomNav
+              goTo={"Test12modif"}
+              title={"Go to Touch Pad Screen ➡️"}
+              navigation={navigation}
+              demoOption={demoOption}
+              circleRadiusInner={circleRadiusInner}
+              circleRadiusMiddle={circleRadiusMiddle}
+              defaultColors={defaultColors}
+              circleRadiusOuter={circleRadiusOuter}
+              numTrianglesMiddle={numTrianglesMiddle}
+              numTrianglesOuter={numTrianglesOuter}
             />
-            <Text style={styles.txtLabel}>
-              Adjust Middle : {circleRadiusOuter}
-            </Text>
-
-            <Slider
-              style={{ width: 300, height: 20 }}
-              minimumValue={25}
-              maximumValue={100}
-              step={1}
-              value={circleRadiusMiddle}
-              onValueChange={(value) => {
-                setCircleRadiusMiddle(value);
-              }}
-              minimumTrackTintColor="#1EB1FC"
-              maximumTrackTintColor="#8E8E93"
-              thumbTintColor="#1EB1FC"
-            />
-            <Text style={styles.txtLabel}>Center : {circleRadiusInner}</Text>
-
-            <Slider
-              style={{ width: 300, height: 20 }}
-              minimumValue={5}
-              maximumValue={50}
-              step={1}
-              value={circleRadiusInner}
-              onValueChange={(value) => {
-                setCircleRadiusInner(value);
-              }}
-              minimumTrackTintColor="#1EB1FC"
-              maximumTrackTintColor="#8E8E93"
-              thumbTintColor="#1EB1FC"
-            />
-          </View>
-
-          <View style={{ padding: 20 }}>
-            {demoOption != 0 ? (
-              <BtnHomNav
-                goTo={"Test12modif"}
-                title={"Go to Touch Pad Screen ➡️"}
-                navigation={navigation}
-                demoOption={demoOption}
-                circleRadiusInner={circleRadiusInner}
-                circleRadiusMiddle={circleRadiusMiddle}
-                defaultColors={defaultColors}
-                circleRadiusOuter={circleRadiusOuter}
-                numTrianglesMiddle={numTrianglesMiddle}
-                numTrianglesOuter={numTrianglesOuter}
-              />
-            ) : (
-              <Text style={{ fontSize: 20 }}>Select a type</Text>
-            )}
-          </View>
-
+          ) : (
+            <Text style={{ fontSize: 20 }}>Select a type</Text>
+          )}
+        </View>
+        <GestureDetector gesture={gestureSwipeOnChange}>
           <View style={styleVwSwipePad}>
             {padVisible && (
               <SwipePad
@@ -545,11 +530,10 @@ export default function Home({ navigation }) {
               />
             )}
           </View>
-
-          <View style={styleVwTapDetails}></View>
-        </View>
-        {/* </SafeAreaView> */}
-      </GestureDetector>
+        </GestureDetector>
+        {/* <View style={styleVwTapDetails}></View> */}
+      </View>
+      {/* </SafeAreaView> */}
     </GestureHandlerRootView>
   );
 }
