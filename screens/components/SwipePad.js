@@ -78,9 +78,11 @@ export default function SwipePad(props) {
     width: props.circleRadiusOuter * 2,
     height: props.circleRadiusOuter * 2,
     borderRadius: props.circleRadiusOuter,
-    backgroundColor: "rgba(70,130,180,.4)",
+    // backgroundColor: "rgba(70,130,180,.4)",
     overflow: "hidden",
     transform: [{ rotate: "-15deg" }],
+    borderWidth: 1,
+    borderColor: "black",
   };
   // ------ Middle Circle ------
   const styleVwMiddleCircle = {
@@ -92,8 +94,10 @@ export default function SwipePad(props) {
     top: props.circleRadiusOuter - props.circleRadiusMiddle,
     left: props.circleRadiusOuter - props.circleRadiusMiddle,
     borderRadius: props.circleRadiusMiddle,
-    backgroundColor: "rgba(70,130,180,.4)",
+    // backgroundColor: "rgba(70,130,180,.4)",
     overflow: "hidden",
+    // borderColor: "black",
+    borderWidth: "1",
     // transform: [{ rotate: "-30deg" }],
   };
   const styleCircleInner = {

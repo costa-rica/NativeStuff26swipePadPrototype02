@@ -32,10 +32,12 @@ export default function Home({ navigation }) {
   const [padVisible, setPadVisible] = useState(true);
   const [padPositionCenter, setPadPositionCenter] = useState({ x: 0, y: 0 });
   const [actionList, setActionList] = useState([]);
+  const swipePadStartX = Dimensions.get("window").width / 3;
+  const swipePadStartY = Dimensions.get("window").height / 3.5;
   const [tapDetails, setTapDetails] = useState({
     timestamp: "no date",
-    padPosCenterX: 0,
-    padPosCenterY: 0,
+    padPosCenterX: swipePadStartX + circleRadiusOuter / 2 - 2.5,
+    padPosCenterY: swipePadStartY + circleRadiusOuter / 2 - 2.5,
   });
   const [tapIsActive, setTapIsActive] = useState(true);
   const [currentActionType, setCurrentActionType] = useState(null);
@@ -72,22 +74,33 @@ export default function Home({ navigation }) {
     setDemoOption(option);
   };
 
-  const onVwSipePadCreated = (event) => {
-    console.log("onSwipePad crated ");
-    // console.log(event);
-    const { x, y, width, height } = event.nativeEvent.layout;
-    // setTimelineLayout({ x, y, width, height });
-    // setTapDetails({
-    //   timestamp: "",
-    //   padPosCenterX: calculatePadPositionCenter(x, y).x,
-    //   padPosCenterY: calculatePadPositionCenter(x, y).y,
-    // });
+  const onChangeSizeCircleOuter = (newSize) => {
+    setCircleRadiusOuter(newSize);
     setTapDetails({
       timestamp: "",
-      padPosCenterX: x + circleRadiusOuter - 2.5,
-      padPosCenterY: y + circleRadiusOuter - 2.5,
+      padPosCenterX: swipePadStartX + newSize / 2 - 2.5,
+      padPosCenterY: swipePadStartY + newSize / 2 - 2.5,
     });
   };
+
+  // const onVwSipePadCreated = (event) => {
+  //   console.log("onSwipePad crated ");
+  //   // console.log(event);
+  //   const { x, y, width, height } = event.nativeEvent.layout;
+  //   // setTimelineLayout({ x, y, width, height });
+  //   // setTapDetails({
+  //   //   timestamp: "",
+  //   //   padPosCenterX: calculatePadPositionCenter(x, y).x,
+  //   //   padPosCenterY: calculatePadPositionCenter(x, y).y,
+  //   // });
+  //   console.log(` x: ${x}, y:${y}`);
+
+  //   // setTapDetails({
+  //   //   timestamp: "",
+  //   //   padPosCenterX: x + circleRadiusOuter - 2.5,
+  //   //   padPosCenterY: y + circleRadiusOuter - 2.5,
+  //   // });
+  // };
 
   // const gestureTapBegin = Gesture.Tap().onBegin((event) => {
   //   if (tapIsActive) {
@@ -283,15 +296,11 @@ export default function Home({ navigation }) {
 
   const styleVwSwipePad = {
     position: "absolute",
-    // top: Dimensions.get("window").height / 2 - circleRadiusOuter,
-    top: Dimensions.get("window").height / 4.5,
-    left: Dimensions.get("window").width / 5,
-    // alignItems: "center",
-    // justifyContent: "center",
-    // backgroundColor: "red",
-    // height: 600,
-    // width: "100%",
-    // zIndex: 19,
+
+    // top: Dimensions.get("window").height / 4.5 - circleRadiusOuter / 2,
+    // left: Dimensions.get("window").width / 5 - circleRadiusOuter / 2,
+    top: swipePadStartY - circleRadiusOuter / 2,
+    left: swipePadStartX - circleRadiusOuter / 2,
   };
   const styleVwTapDetails = {
     width: 5,
@@ -381,7 +390,7 @@ export default function Home({ navigation }) {
                 step={1}
                 value={circleRadiusOuter}
                 onValueChange={(value) => {
-                  setCircleRadiusOuter(value);
+                  onChangeSizeCircleOuter(value);
                 }}
                 minimumTrackTintColor="#1EB1FC"
                 maximumTrackTintColor="#8E8E93"
@@ -436,7 +445,7 @@ export default function Home({ navigation }) {
             </View>
             <View
               style={styleVwSwipePad}
-              onLayout={(event) => onVwSipePadCreated(event)}
+              // onLayout={(event) => onVwSipePadCreated(event)}
             >
               {padVisible && (
                 <SwipePad
