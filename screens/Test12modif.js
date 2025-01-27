@@ -194,6 +194,13 @@ export default function Test12modif({ route, navigation }) {
       handleSwipeColorChange("center");
       setCurrentActionType(null);
     } else {
+      if (demoOption === "4-8")
+        logicFourEightCircle(
+          relativeToPadCenterX,
+          relativeToPadCenterY,
+          inMiddleCircle
+        );
+
       if (demoOption == "5-10")
         logicFiveTenCircle(
           relativeToPadCenterX,
@@ -206,94 +213,74 @@ export default function Test12modif({ route, navigation }) {
           relativeToPadCenterY,
           inMiddleCircle
         );
-      // if (
-      //   relativeToPadCenterY > boundary345Y &&
-      //   relativeToPadCenterY < boundary57Y
-      // ) {
-      //   // Right (bottom - ish) side (sector 1)
-      //   handleSwipeColorChange(1);
-      //   setCurrentActionType(1);
-
-      //   if (!inMiddleCircle) {
-      //     if (relativeToPadCenterY < boundary21Y) {
-      //       handleSwipeColorChange(1, 6);
-      //       setCurrentActionType(6);
-      //     } else {
-      //       handleSwipeColorChange(1, 7);
-      //       setCurrentActionType(7);
-      //     }
-      //   }
-      // } else if (
-      //   relativeToPadCenterY > boundary57Y &&
-      //   relativeToPadCenterY > boundary129Y
-      // ) {
-      //   // Bottom (sector 2)
-      //   handleSwipeColorChange(2);
-      //   setCurrentActionType(2);
-      //   if (!inMiddleCircle) {
-      //     if (relativeToPadCenterY > boundary93Y) {
-      //       handleSwipeColorChange(2, 8);
-      //       setCurrentActionType(8);
-      //     } else {
-      //       handleSwipeColorChange(2, 9);
-      //       setCurrentActionType(9);
-      //     }
-      //   }
-      // }
-      // //
-      // else if (
-      //   // relativeToPadCenterY < -boundary231Y &&
-      //   relativeToPadCenterY > boundary201Y
-      // ) {
-      //   // Left
-      //   handleSwipeColorChange(3);
-      //   setCurrentActionType(3);
-      //   if (!inMiddleCircle) {
-      //     if (relativeToPadCenterY > boundary165Y) {
-      //       // line that splits the the outer sectors and cuts the middle sector in half
-      //       handleSwipeColorChange(3, 10);
-      //       setCurrentActionType(10);
-      //     } else {
-      //       handleSwipeColorChange(3, 11);
-      //       setCurrentActionType(11);
-      //     }
-      //   }
-      // }
-      // //
-      // else if (
-      //   relativeToPadCenterY < boundary273Y
-      //   // &&
-      //   // relativeToPadCenterY > boundary201Y
-      // ) {
-      //   // Top Left
-      //   handleSwipeColorChange(4);
-      //   setCurrentActionType(4);
-      //   if (!inMiddleCircle) {
-      //     if (relativeToPadCenterY > boundary237Y) {
-      //       handleSwipeColorChange(4, 12);
-      //       setCurrentActionType(12);
-      //     } else {
-      //       handleSwipeColorChange(4, 13);
-      //       setCurrentActionType(13);
-      //     }
-      //   }
-      // } else {
-      //   // setSwipeColorDict(defaultColors);
-      //   handleSwipeColorChange(5);
-      //   setCurrentActionType(5);
-      //   if (!inMiddleCircle) {
-      //     if (relativeToPadCenterY < boundary309Y) {
-      //       handleSwipeColorChange(5, 14);
-      //       setCurrentActionType(14);
-      //     } else {
-      //       handleSwipeColorChange(5, 15);
-      //       setCurrentActionType(15);
-      //     }
-      //   }
-      // }
     }
   });
 
+  const logicFourEightCircle = (
+    relativeToPadCenterX,
+    relativeToPadCenterY,
+    inMiddleCircle
+  ) => {
+    const boundary45 = relativeToPadCenterX * Math.tan((Math.PI / 180) * 45);
+    // console.log(
+    //   `relativeX: ${relativeToPadCenterX}, relativeY: ${relativeToPadCenterY}, b45:${boundary45}`
+    // );
+    if (relativeToPadCenterX > 0 && relativeToPadCenterY > 0) {
+      // Bottom Right
+      handleSwipeColorChange(1);
+      setCurrentActionType(1);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY < boundary45) {
+          handleSwipeColorChange(1, 5);
+          setCurrentActionType(5);
+        } else {
+          handleSwipeColorChange(1, 6);
+          setCurrentActionType(6);
+        }
+      }
+    } else if (relativeToPadCenterX < 0 && relativeToPadCenterY > 0) {
+      // Bottom Left
+      handleSwipeColorChange(2);
+      setCurrentActionType(2);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > Math.abs(boundary45)) {
+          handleSwipeColorChange(2, 7);
+          setCurrentActionType(7);
+        } else {
+          handleSwipeColorChange(2, 8);
+          setCurrentActionType(8);
+        }
+      }
+    } else if (relativeToPadCenterX < 0 && relativeToPadCenterY < 0) {
+      // Top Right
+      handleSwipeColorChange(3);
+      setCurrentActionType(3);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary45) {
+          handleSwipeColorChange(3, 9);
+          setCurrentActionType(9);
+        } else {
+          handleSwipeColorChange(3, 10);
+          setCurrentActionType(10);
+        }
+      }
+    } else if (relativeToPadCenterX > 0 && relativeToPadCenterY < 0) {
+      // Top Right
+      handleSwipeColorChange(4);
+      setCurrentActionType(4);
+      if (!inMiddleCircle) {
+        if (Math.abs(relativeToPadCenterY) > boundary45) {
+          handleSwipeColorChange(4, 11);
+          setCurrentActionType(11);
+        } else {
+          handleSwipeColorChange(4, 12);
+          setCurrentActionType(12);
+        }
+      }
+    } else {
+      setSwipeColorDict(defaultColors);
+    }
+  };
   const logicFiveTenCircle = (
     relativeToPadCenterX,
     relativeToPadCenterY,
