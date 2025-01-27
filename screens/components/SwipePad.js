@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { Polygon, Svg, Circle } from "react-native-svg";
+import { useState, useEffect } from "react";
 
 export default function SwipePad(props) {
   //const circleRadius = props.circleRadiusOuter; // Radius of the circle
@@ -74,13 +75,32 @@ export default function SwipePad(props) {
     }
   );
 
+  const [rotateOuter, setRotateOuter] = useState(false);
+  const [rotateMiddle, setRotateMiddle] = useState(false);
+  useEffect(() => {
+    if (props.numTrianglesMiddle === 5) {
+      setRotateOuter(true);
+      setRotateMiddle(false);
+      // console.log("triggered rotateOuter");
+    } else if (props.numTrianglesMiddle === 4) {
+      setRotateOuter(true);
+      setRotateMiddle(true);
+    } else {
+      setRotateOuter(false);
+      setRotateMiddle(false);
+    }
+  }, [props.numTrianglesMiddle]);
+
+  // console.log(`rotateOuter: ${rotateOuter}`);
+  // // console.log(`props.numTrianglesOuter: ${props.numTrianglesOuter}`);
+  // console.log(`props.numTrianglesMiddle: ${props.numTrianglesMiddle}`);
   const styleVwOuter = {
     width: props.circleRadiusOuter * 2,
     height: props.circleRadiusOuter * 2,
     borderRadius: props.circleRadiusOuter,
-    // backgroundColor: "rgba(70,130,180,.4)",
     overflow: "hidden",
     transform: [{ rotate: "-15deg" }],
+    transform: [{ rotate: rotateOuter ? "-15deg" : "0deg" }],
     borderWidth: 1,
     borderColor: "black",
   };
@@ -89,16 +109,13 @@ export default function SwipePad(props) {
     position: "absolute",
     width: props.circleRadiusMiddle * 2,
     height: props.circleRadiusMiddle * 2,
-    // top: props.circleRadiusOuter / 2,
-    // left: props.circleRadiusOuter / 2,
     top: props.circleRadiusOuter - props.circleRadiusMiddle,
     left: props.circleRadiusOuter - props.circleRadiusMiddle,
     borderRadius: props.circleRadiusMiddle,
-    // backgroundColor: "rgba(70,130,180,.4)",
     overflow: "hidden",
-    // borderColor: "black",
-    borderWidth: "1",
-    // transform: [{ rotate: "-30deg" }],
+    borderWidth: 1,
+    // transform: [{ rotate: rotateInner ? "-30deg" : "0deg" }],
+    transform: [{ rotate: rotateMiddle ? "-30deg" : "0deg" }],
   };
   const styleCircleInner = {
     position: "absolute",

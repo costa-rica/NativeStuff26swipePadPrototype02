@@ -47,9 +47,9 @@ export default function Home({ navigation }) {
   // const numTrianglesOuter = 10;
 
   const defaultColors = {
-    1: "rgba(125, 150, 100, 0.5)", // right
-    2: "rgba(150, 100, 125, 0.5)", // bottom
-    3: "rgba(150, 100, 125, 0.5)", // bottombottomleft
+    1: "rgba(125, 150, 100, 0.8)", // right
+    2: "rgba(150, 100, 125, 0.8)", // bottom
+    3: "rgba(150, 100, 125, 0.8)", // bottombottomleft
     4: "rgba(125, 100, 150, 0.5)",
     5: "rgba(150, 100, 125, 0.5)", // bottombottomleft
     6: "rgba(125, 100, 150, 0.5)",
@@ -89,45 +89,6 @@ export default function Home({ navigation }) {
       padPosCenterY: swipePadStartY + newSize / 2 - 2.5,
     });
   };
-
-  // const onVwSipePadCreated = (event) => {
-  //   console.log("onSwipePad crated ");
-  //   // console.log(event);
-  //   const { x, y, width, height } = event.nativeEvent.layout;
-  //   // setTimelineLayout({ x, y, width, height });
-  //   // setTapDetails({
-  //   //   timestamp: "",
-  //   //   padPosCenterX: calculatePadPositionCenter(x, y).x,
-  //   //   padPosCenterY: calculatePadPositionCenter(x, y).y,
-  //   // });
-  //   console.log(` x: ${x}, y:${y}`);
-
-  //   // setTapDetails({
-  //   //   timestamp: "",
-  //   //   padPosCenterX: x + circleRadiusOuter - 2.5,
-  //   //   padPosCenterY: y + circleRadiusOuter - 2.5,
-  //   // });
-  // };
-
-  // const gestureTapBegin = Gesture.Tap().onBegin((event) => {
-  //   if (tapIsActive) {
-  //     const timestamp = new Date().toISOString();
-  //     const { x, y, absoluteX, absoluteY } = event;
-
-  //     setPadPositionCenter({
-  //       x: calculatePadPositionCenter(x, y).x,
-  //       y: calculatePadPositionCenter(x, y).y,
-  //     });
-  //     setPadVisible(true);
-  //     setTapDetails({
-  //       timestamp,
-  //       padPosCenterX: calculatePadPositionCenter(x, y).x,
-  //       padPosCenterY: calculatePadPositionCenter(x, y).y,
-  //     });
-  //     setTapIsActive(false);
-  //     handleSwipeColorChange("center");
-  //   }
-  // });
 
   // Function to temporarily change color
   const handleSwipeColorChange = (direction, outerDirection = false) => {
@@ -183,14 +144,46 @@ export default function Home({ navigation }) {
     const inInnerCircle = distanceFromCenter < circleRadiusInner;
     const inMiddleCircle = distanceFromCenter < circleRadiusMiddle;
 
-    console.log(
-      `circle x: ${tapDetails.padPosCenterX}, y:${tapDetails.padPosCenterY}`
-    );
     // console.log(
-    //   `relativeToPadCenterX: ${Math.round(
-    //     relativeToPadCenterX
-    //   )}, relativeToPadCenterY:${Math.round(relativeToPadCenterY)}`
+    //   `circle x: ${tapDetails.padPosCenterX}, y:${tapDetails.padPosCenterY}`
     // );
+
+    // // Y dependent
+    // const boundary345Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 345); // sector 1 beginning
+    // const boundary57Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 57); // sector 1 end sector 2 begin
+    // const boundary21Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 21); // sector 1-1 end 1-2 begin
+    // const boundary129Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 129); // sector 2 end 3begin
+    // const boundary93Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 93); // splits sector 2
+    // const boundary201Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 201); // sector 3-1 top end
+    // const boundary165Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 165); // sector 3-1 top end
+    // const boundary273Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 273); // sector 4 end 5 begin
+    // const boundary237Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 237); // splits sector 4
+    // const boundary309Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 309); // splits sector 5
+
+    if (inInnerCircle) {
+      handleSwipeColorChange("center");
+      setCurrentActionType(null);
+    } else {
+      if (demoOption == "5-10")
+        logicFiveTenCircle(
+          relativeToPadCenterX,
+          relativeToPadCenterY,
+          inMiddleCircle
+        );
+      if (demoOption === "4-12")
+        logicFourTwelveCircle(
+          relativeToPadCenterX,
+          relativeToPadCenterY,
+          inMiddleCircle
+        );
+    }
+  });
+
+  const logicFiveTenCircle = (
+    relativeToPadCenterX,
+    relativeToPadCenterY,
+    inMiddleCircle
+  ) => {
     // Y dependent
     const boundary345Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 345); // sector 1 beginning
     const boundary57Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 57); // sector 1 end sector 2 begin
@@ -203,109 +196,182 @@ export default function Home({ navigation }) {
     const boundary237Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 237); // splits sector 4
     const boundary309Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 309); // splits sector 5
 
-    if (inInnerCircle) {
-      handleSwipeColorChange("center");
-      setCurrentActionType(null);
-    } else {
-      if (
-        relativeToPadCenterY > boundary345Y &&
-        relativeToPadCenterY < boundary57Y
-      ) {
-        // Right (bottom - ish) side (sector 1)
-        handleSwipeColorChange(1);
-        setCurrentActionType(1);
+    if (
+      relativeToPadCenterY > boundary345Y &&
+      relativeToPadCenterY < boundary57Y
+    ) {
+      // Right (bottom - ish) side (sector 1)
+      handleSwipeColorChange(1);
+      setCurrentActionType(1);
 
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY < boundary21Y) {
-            handleSwipeColorChange(1, 6);
-            setCurrentActionType(6);
-          } else {
-            handleSwipeColorChange(1, 7);
-            setCurrentActionType(7);
-          }
-        }
-      } else if (
-        relativeToPadCenterY > boundary57Y &&
-        relativeToPadCenterY > boundary129Y
-      ) {
-        // Bottom (sector 2)
-        handleSwipeColorChange(2);
-        setCurrentActionType(2);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY > boundary93Y) {
-            handleSwipeColorChange(2, 8);
-            setCurrentActionType(8);
-          } else {
-            handleSwipeColorChange(2, 9);
-            setCurrentActionType(9);
-          }
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY < boundary21Y) {
+          handleSwipeColorChange(1, 6);
+          setCurrentActionType(6);
+        } else {
+          handleSwipeColorChange(1, 7);
+          setCurrentActionType(7);
         }
       }
-      //
-      else if (
-        // relativeToPadCenterY < -boundary231Y &&
-        relativeToPadCenterY > boundary201Y
-      ) {
-        // Left
-        handleSwipeColorChange(3);
-        setCurrentActionType(3);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY > boundary165Y) {
-            // line that splits the the outer sectors and cuts the middle sector in half
-            handleSwipeColorChange(3, 10);
-            setCurrentActionType(10);
-          } else {
-            handleSwipeColorChange(3, 11);
-            setCurrentActionType(11);
-          }
-        }
-      }
-      //
-      else if (
-        relativeToPadCenterY < boundary273Y
-        // &&
-        // relativeToPadCenterY > boundary201Y
-      ) {
-        // Top Left
-        handleSwipeColorChange(4);
-        setCurrentActionType(4);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY > boundary237Y) {
-            handleSwipeColorChange(4, 12);
-            setCurrentActionType(12);
-          } else {
-            handleSwipeColorChange(4, 13);
-            setCurrentActionType(13);
-          }
-        }
-      } else {
-        // setSwipeColorDict(defaultColors);
-        handleSwipeColorChange(5);
-        setCurrentActionType(5);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY < boundary309Y) {
-            handleSwipeColorChange(5, 14);
-            setCurrentActionType(14);
-          } else {
-            handleSwipeColorChange(5, 15);
-            setCurrentActionType(15);
-          }
+    } else if (
+      relativeToPadCenterY > boundary57Y &&
+      relativeToPadCenterY > boundary129Y
+    ) {
+      // Bottom (sector 2)
+      handleSwipeColorChange(2);
+      setCurrentActionType(2);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary93Y) {
+          handleSwipeColorChange(2, 8);
+          setCurrentActionType(8);
+        } else {
+          handleSwipeColorChange(2, 9);
+          setCurrentActionType(9);
         }
       }
     }
-  });
+    //
+    else if (
+      // relativeToPadCenterY < -boundary231Y &&
+      relativeToPadCenterY > boundary201Y
+    ) {
+      // Left
+      handleSwipeColorChange(3);
+      setCurrentActionType(3);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary165Y) {
+          // line that splits the the outer sectors and cuts the middle sector in half
+          handleSwipeColorChange(3, 10);
+          setCurrentActionType(10);
+        } else {
+          handleSwipeColorChange(3, 11);
+          setCurrentActionType(11);
+        }
+      }
+    }
+    //
+    else if (
+      relativeToPadCenterY < boundary273Y
+      // &&
+      // relativeToPadCenterY > boundary201Y
+    ) {
+      // Top Left
+      handleSwipeColorChange(4);
+      setCurrentActionType(4);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary237Y) {
+          handleSwipeColorChange(4, 12);
+          setCurrentActionType(12);
+        } else {
+          handleSwipeColorChange(4, 13);
+          setCurrentActionType(13);
+        }
+      }
+    } else {
+      // setSwipeColorDict(defaultColors);
+      handleSwipeColorChange(5);
+      setCurrentActionType(5);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY < boundary309Y) {
+          handleSwipeColorChange(5, 14);
+          setCurrentActionType(14);
+        } else {
+          handleSwipeColorChange(5, 15);
+          setCurrentActionType(15);
+        }
+      }
+    }
+  };
 
-  // const styleVwMainPosition = {
-  //   // position: "absolute",
-  //   // left: padPositionCenter.x, // Center modal horizontally
-  //   // top: padPositionCenter.y, // Center modal vertically
-  // };
+  const logicFourTwelveCircle = (
+    relativeToPadCenterX,
+    relativeToPadCenterY,
+    inMiddleCircle
+  ) => {
+    // Y dependent
+    const boundary15Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 15); // ? parts to circle, 15 degrees
+    // const boundary30Y =
+    //   relativeToPadCenterX * Math.tan((Math.PI / 180) * (360 / 12)); // 12 parts to circle
+    const boundary45Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 45); // 8 parts to circle 45 = 360/8
+    // X dependent
+    const boundary75X =
+      relativeToPadCenterY * (1 / Math.tan((Math.PI / 180) * 75));
+
+    if (Math.abs(relativeToPadCenterY) < boundary45Y) {
+      // Right side
+      handleSwipeColorChange(1);
+      setCurrentActionType(1);
+      if (!inMiddleCircle) {
+        if (-relativeToPadCenterY > boundary15Y) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(1, 16);
+          setCurrentActionType(16);
+        } else if (Math.abs(relativeToPadCenterY) < boundary15Y) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(1, 5);
+          setCurrentActionType(5);
+        } else {
+          handleSwipeColorChange(1, 6);
+          setCurrentActionType(6);
+        }
+      }
+    } else if (relativeToPadCenterY > Math.abs(boundary45Y)) {
+      // Bottom
+      handleSwipeColorChange(2);
+      setCurrentActionType(2);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterX > boundary75X) {
+          handleSwipeColorChange(2, 7);
+          setCurrentActionType(7);
+        } else if (Math.abs(relativeToPadCenterX) < boundary75X) {
+          handleSwipeColorChange(2, 8);
+          setCurrentActionType(8);
+        } else {
+          handleSwipeColorChange(2, 9);
+          setCurrentActionType(9);
+        }
+      }
+    } else if (relativeToPadCenterY > boundary45Y) {
+      // Left
+      handleSwipeColorChange(3);
+      setCurrentActionType(3);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > Math.abs(boundary15Y)) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(3, 10);
+          setCurrentActionType(10);
+        } else if (relativeToPadCenterY > boundary15Y) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(3, 11);
+          setCurrentActionType(11);
+        } else {
+          handleSwipeColorChange(3, 12);
+          setCurrentActionType(12);
+        }
+      }
+    } else if (relativeToPadCenterY < boundary45Y) {
+      // Top
+      handleSwipeColorChange(4);
+      setCurrentActionType(4);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterX < boundary75X) {
+          handleSwipeColorChange(4, 13);
+          setCurrentActionType(13);
+        } else if (relativeToPadCenterX < Math.abs(boundary75X)) {
+          handleSwipeColorChange(4, 14);
+          setCurrentActionType(14);
+        } else {
+          handleSwipeColorChange(4, 15);
+          setCurrentActionType(15);
+        }
+      }
+    } else {
+      setSwipeColorDict(defaultColors);
+    }
+  };
 
   const styleVwSwipePad = {
     position: "absolute",
-
-    // top: Dimensions.get("window").height / 4.5 - circleRadiusOuter / 2,
-    // left: Dimensions.get("window").width / 5 - circleRadiusOuter / 2,
     top: swipePadStartY - circleRadiusOuter / 2,
     left: swipePadStartX - circleRadiusOuter / 2,
   };
@@ -319,12 +385,10 @@ export default function Home({ navigation }) {
   };
 
   const calculatePadPositionCenter = (x, y) => {
-    // const centeredX = x - circleRadiusOuter;
-    // const centeredY = y - circleRadiusOuter;
     const centeredX = x;
-    const centeredY = y - 65;
+    // const centeredY = y - 65;
+    const centeredY = y;
     return { x: centeredX, y: centeredY };
-    // return { x: 0, y: 0 };
   };
   const calculateDistanceFromCenter = (swipePosX, swipePosY) => {
     return Math.sqrt(
@@ -344,143 +408,147 @@ export default function Home({ navigation }) {
       }}
     >
       <GestureDetector gesture={gestureSwipeOnChange}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={styles.container}>
-            <View style={styles.vwTitle}>
-              <Text style={styles.txtTitle}>Swipe Pad Demo</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 5,
-                width: Dimensions.get("window").width * 0.9,
-              }}
-            >
-              <Text style={{ fontSize: 20 }}> Choose type:</Text>
-
-              <ButtonKv
-                colorBackground={"blue"}
-                width={60}
-                onPress={() => handleChoice("5-10")}
-                selected={demoOption == "5-10"}
-              >
-                5-10
-              </ButtonKv>
-              <ButtonKv
-                colorBackground={"blue"}
-                width={50}
-                onPress={() => handleChoice(5)}
-                selected={demoOption == 5}
-              >
-                5
-              </ButtonKv>
-              <ButtonKv
-                colorBackground={demoOption == 7 ? "red" : "blue"}
-                width={50}
-                onPress={() => handleChoice(7)}
-                selected={demoOption == 7}
-              >
-                7
-              </ButtonKv>
-            </View>
-            <View style={{ flex: 1 }} />
-            <View style={styles.vwSlider}>
-              <Text style={styles.txtLabel}>
-                Adjust OuterRadius: {circleRadiusOuter}
-              </Text>
-
-              <Slider
-                style={{ width: 300, height: 20 }}
-                minimumValue={50}
-                maximumValue={200}
-                step={1}
-                value={circleRadiusOuter}
-                onValueChange={(value) => {
-                  onChangeSizeCircleOuter(value);
-                }}
-                minimumTrackTintColor="#1EB1FC"
-                maximumTrackTintColor="#8E8E93"
-                thumbTintColor="#1EB1FC"
-              />
-              <Text style={styles.txtLabel}>
-                Adjust Middle : {circleRadiusOuter}
-              </Text>
-
-              <Slider
-                style={{ width: 300, height: 20 }}
-                minimumValue={25}
-                maximumValue={100}
-                step={1}
-                value={circleRadiusMiddle}
-                onValueChange={(value) => {
-                  setCircleRadiusMiddle(value);
-                }}
-                minimumTrackTintColor="#1EB1FC"
-                maximumTrackTintColor="#8E8E93"
-                thumbTintColor="#1EB1FC"
-              />
-              <Text style={styles.txtLabel}>Center : {circleRadiusInner}</Text>
-
-              <Slider
-                style={{ width: 300, height: 20 }}
-                minimumValue={5}
-                maximumValue={50}
-                step={1}
-                value={circleRadiusInner}
-                onValueChange={(value) => {
-                  setCircleRadiusInner(value);
-                }}
-                minimumTrackTintColor="#1EB1FC"
-                maximumTrackTintColor="#8E8E93"
-                thumbTintColor="#1EB1FC"
-              />
-            </View>
-            <View style={{ padding: 20 }}>
-              {demoOption != 0 ? (
-                <BtnHomNav
-                  goTo={"Test12modif"}
-                  title={"Go to Touch Pad Screen ➡️"}
-                  // description={"use location to display swipe pad"}
-                  navigation={navigation}
-                  // modalRadius={modalRadius}
-                  demoOption={demoOption}
-                  circleRadiusInner={circleRadiusInner}
-                  circleRadiusMiddle={circleRadiusMiddle}
-                  // styleVwMainPosition={styleVwMainPosition}
-                  // swipeColorDict={swipeColorDict}
-                  // setSwipeColorDict={setSwipeColorDict}
-                  defaultColors={defaultColors}
-                  circleRadiusOuter={circleRadiusOuter}
-                  numTrianglesMiddle={numTrianglesMiddle}
-                  numTrianglesOuter={numTrianglesOuter}
-                />
-              ) : (
-                <Text style={{ fontSize: 20 }}>Select a type</Text>
-              )}
-            </View>
-            <View
-              style={styleVwSwipePad}
-              // onLayout={(event) => onVwSipePadCreated(event)}
-            >
-              {padVisible && (
-                <SwipePad
-                  numTrianglesMiddle={numTrianglesMiddle}
-                  numTrianglesOuter={numTrianglesOuter}
-                  circleRadiusInner={circleRadiusInner}
-                  circleRadiusMiddle={circleRadiusMiddle}
-                  styleVwMainPosition={{}}
-                  circleRadiusOuter={circleRadiusOuter}
-                  swipeColorDict={swipeColorDict}
-                  setSwipeColorDict={setSwipeColorDict}
-                  defaultColors={defaultColors}
-                />
-              )}
-            </View>
-            <View style={styleVwTapDetails}></View>
+        {/* <SafeAreaView style={{ flex: 1 }}> */}
+        <View style={styles.container}>
+          <View style={styles.vwTitle}>
+            <Text style={styles.txtTitle}>Swipe Pad Demo</Text>
           </View>
-        </SafeAreaView>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 5,
+              width: Dimensions.get("window").width * 0.9,
+            }}
+          >
+            <Text style={{ fontSize: 20 }}> Choose type:</Text>
+
+            <ButtonKv
+              colorBackground={"blue"}
+              width={60}
+              onPress={() => handleChoice("5-10")}
+              selected={demoOption == "5-10"}
+            >
+              5-10
+            </ButtonKv>
+            <ButtonKv
+              colorBackground={"blue"}
+              width={60}
+              onPress={() => handleChoice("4-12")}
+              selected={demoOption == "4-12"}
+            >
+              4-12
+            </ButtonKv>
+            <ButtonKv
+              colorBackground={"blue"}
+              width={50}
+              onPress={() => handleChoice(5)}
+              selected={demoOption == 5}
+            >
+              5
+            </ButtonKv>
+            <ButtonKv
+              colorBackground={demoOption == 7 ? "red" : "blue"}
+              width={50}
+              onPress={() => handleChoice(7)}
+              selected={demoOption == 7}
+            >
+              7
+            </ButtonKv>
+          </View>
+          <View style={{ flex: 1 }} />
+
+          <View style={styles.vwSlider}>
+            <Text style={styles.txtLabel}>
+              Adjust OuterRadius: {circleRadiusOuter}
+            </Text>
+
+            <Slider
+              style={{ width: 300, height: 20 }}
+              minimumValue={50}
+              maximumValue={200}
+              step={1}
+              value={circleRadiusOuter}
+              onValueChange={(value) => {
+                onChangeSizeCircleOuter(value);
+              }}
+              minimumTrackTintColor="#1EB1FC"
+              maximumTrackTintColor="#8E8E93"
+              thumbTintColor="#1EB1FC"
+            />
+            <Text style={styles.txtLabel}>
+              Adjust Middle : {circleRadiusOuter}
+            </Text>
+
+            <Slider
+              style={{ width: 300, height: 20 }}
+              minimumValue={25}
+              maximumValue={100}
+              step={1}
+              value={circleRadiusMiddle}
+              onValueChange={(value) => {
+                setCircleRadiusMiddle(value);
+              }}
+              minimumTrackTintColor="#1EB1FC"
+              maximumTrackTintColor="#8E8E93"
+              thumbTintColor="#1EB1FC"
+            />
+            <Text style={styles.txtLabel}>Center : {circleRadiusInner}</Text>
+
+            <Slider
+              style={{ width: 300, height: 20 }}
+              minimumValue={5}
+              maximumValue={50}
+              step={1}
+              value={circleRadiusInner}
+              onValueChange={(value) => {
+                setCircleRadiusInner(value);
+              }}
+              minimumTrackTintColor="#1EB1FC"
+              maximumTrackTintColor="#8E8E93"
+              thumbTintColor="#1EB1FC"
+            />
+          </View>
+
+          <View style={{ padding: 20 }}>
+            {demoOption != 0 ? (
+              <BtnHomNav
+                goTo={"Test12modif"}
+                title={"Go to Touch Pad Screen ➡️"}
+                navigation={navigation}
+                demoOption={demoOption}
+                circleRadiusInner={circleRadiusInner}
+                circleRadiusMiddle={circleRadiusMiddle}
+                defaultColors={defaultColors}
+                circleRadiusOuter={circleRadiusOuter}
+                numTrianglesMiddle={numTrianglesMiddle}
+                numTrianglesOuter={numTrianglesOuter}
+              />
+            ) : (
+              <Text style={{ fontSize: 20 }}>Select a type</Text>
+            )}
+          </View>
+
+          <View style={styleVwSwipePad}>
+            {padVisible && (
+              <SwipePad
+                numTrianglesMiddle={numTrianglesMiddle}
+                numTrianglesOuter={numTrianglesOuter}
+                circleRadiusInner={circleRadiusInner}
+                circleRadiusMiddle={circleRadiusMiddle}
+                styleVwMainPosition={{}}
+                circleRadiusOuter={circleRadiusOuter}
+                swipeColorDict={swipeColorDict}
+                setSwipeColorDict={setSwipeColorDict}
+                defaultColors={defaultColors}
+              />
+            )}
+          </View>
+
+          <View style={styleVwTapDetails}></View>
+        </View>
+        {/* </SafeAreaView> */}
       </GestureDetector>
     </GestureHandlerRootView>
   );

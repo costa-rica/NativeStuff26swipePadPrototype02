@@ -13,6 +13,7 @@ import { Polygon, Svg, Circle } from "react-native-svg";
 
 export default function Test12modif({ route, navigation }) {
   const {
+    demoOption,
     numTrianglesMiddle,
     numTrianglesOuter,
     circleRadiusInner,
@@ -193,93 +194,296 @@ export default function Test12modif({ route, navigation }) {
       handleSwipeColorChange("center");
       setCurrentActionType(null);
     } else {
-      if (
-        relativeToPadCenterY > boundary345Y &&
-        relativeToPadCenterY < boundary57Y
-      ) {
-        // Right (bottom - ish) side (sector 1)
-        handleSwipeColorChange(1);
-        setCurrentActionType(1);
+      if (demoOption == "5-10")
+        logicFiveTenCircle(
+          relativeToPadCenterX,
+          relativeToPadCenterY,
+          inMiddleCircle
+        );
+      if (demoOption === "4-12")
+        logicFourTwelveCircle(
+          relativeToPadCenterX,
+          relativeToPadCenterY,
+          inMiddleCircle
+        );
+      // if (
+      //   relativeToPadCenterY > boundary345Y &&
+      //   relativeToPadCenterY < boundary57Y
+      // ) {
+      //   // Right (bottom - ish) side (sector 1)
+      //   handleSwipeColorChange(1);
+      //   setCurrentActionType(1);
 
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY < boundary21Y) {
-            handleSwipeColorChange(1, 6);
-            setCurrentActionType(6);
-          } else {
-            handleSwipeColorChange(1, 7);
-            setCurrentActionType(7);
-          }
-        }
-      } else if (
-        relativeToPadCenterY > boundary57Y &&
-        relativeToPadCenterY > boundary129Y
-      ) {
-        // Bottom (sector 2)
-        handleSwipeColorChange(2);
-        setCurrentActionType(2);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY > boundary93Y) {
-            handleSwipeColorChange(2, 8);
-            setCurrentActionType(8);
-          } else {
-            handleSwipeColorChange(2, 9);
-            setCurrentActionType(9);
-          }
+      //   if (!inMiddleCircle) {
+      //     if (relativeToPadCenterY < boundary21Y) {
+      //       handleSwipeColorChange(1, 6);
+      //       setCurrentActionType(6);
+      //     } else {
+      //       handleSwipeColorChange(1, 7);
+      //       setCurrentActionType(7);
+      //     }
+      //   }
+      // } else if (
+      //   relativeToPadCenterY > boundary57Y &&
+      //   relativeToPadCenterY > boundary129Y
+      // ) {
+      //   // Bottom (sector 2)
+      //   handleSwipeColorChange(2);
+      //   setCurrentActionType(2);
+      //   if (!inMiddleCircle) {
+      //     if (relativeToPadCenterY > boundary93Y) {
+      //       handleSwipeColorChange(2, 8);
+      //       setCurrentActionType(8);
+      //     } else {
+      //       handleSwipeColorChange(2, 9);
+      //       setCurrentActionType(9);
+      //     }
+      //   }
+      // }
+      // //
+      // else if (
+      //   // relativeToPadCenterY < -boundary231Y &&
+      //   relativeToPadCenterY > boundary201Y
+      // ) {
+      //   // Left
+      //   handleSwipeColorChange(3);
+      //   setCurrentActionType(3);
+      //   if (!inMiddleCircle) {
+      //     if (relativeToPadCenterY > boundary165Y) {
+      //       // line that splits the the outer sectors and cuts the middle sector in half
+      //       handleSwipeColorChange(3, 10);
+      //       setCurrentActionType(10);
+      //     } else {
+      //       handleSwipeColorChange(3, 11);
+      //       setCurrentActionType(11);
+      //     }
+      //   }
+      // }
+      // //
+      // else if (
+      //   relativeToPadCenterY < boundary273Y
+      //   // &&
+      //   // relativeToPadCenterY > boundary201Y
+      // ) {
+      //   // Top Left
+      //   handleSwipeColorChange(4);
+      //   setCurrentActionType(4);
+      //   if (!inMiddleCircle) {
+      //     if (relativeToPadCenterY > boundary237Y) {
+      //       handleSwipeColorChange(4, 12);
+      //       setCurrentActionType(12);
+      //     } else {
+      //       handleSwipeColorChange(4, 13);
+      //       setCurrentActionType(13);
+      //     }
+      //   }
+      // } else {
+      //   // setSwipeColorDict(defaultColors);
+      //   handleSwipeColorChange(5);
+      //   setCurrentActionType(5);
+      //   if (!inMiddleCircle) {
+      //     if (relativeToPadCenterY < boundary309Y) {
+      //       handleSwipeColorChange(5, 14);
+      //       setCurrentActionType(14);
+      //     } else {
+      //       handleSwipeColorChange(5, 15);
+      //       setCurrentActionType(15);
+      //     }
+      //   }
+      // }
+    }
+  });
+
+  const logicFiveTenCircle = (
+    relativeToPadCenterX,
+    relativeToPadCenterY,
+    inMiddleCircle
+  ) => {
+    // Y dependent
+    const boundary345Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 345); // sector 1 beginning
+    const boundary57Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 57); // sector 1 end sector 2 begin
+    const boundary21Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 21); // sector 1-1 end 1-2 begin
+    const boundary129Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 129); // sector 2 end 3begin
+    const boundary93Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 93); // splits sector 2
+    const boundary201Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 201); // sector 3-1 top end
+    const boundary165Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 165); // sector 3-1 top end
+    const boundary273Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 273); // sector 4 end 5 begin
+    const boundary237Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 237); // splits sector 4
+    const boundary309Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 309); // splits sector 5
+
+    if (
+      relativeToPadCenterY > boundary345Y &&
+      relativeToPadCenterY < boundary57Y
+    ) {
+      // Right (bottom - ish) side (sector 1)
+      handleSwipeColorChange(1);
+      setCurrentActionType(1);
+
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY < boundary21Y) {
+          handleSwipeColorChange(1, 6);
+          setCurrentActionType(6);
+        } else {
+          handleSwipeColorChange(1, 7);
+          setCurrentActionType(7);
         }
       }
-      //
-      else if (
-        // relativeToPadCenterY < -boundary231Y &&
-        relativeToPadCenterY > boundary201Y
-      ) {
-        // Left
-        handleSwipeColorChange(3);
-        setCurrentActionType(3);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY > boundary165Y) {
-            // line that splits the the outer sectors and cuts the middle sector in half
-            handleSwipeColorChange(3, 10);
-            setCurrentActionType(10);
-          } else {
-            handleSwipeColorChange(3, 11);
-            setCurrentActionType(11);
-          }
-        }
-      }
-      //
-      else if (
-        relativeToPadCenterY < boundary273Y
-        // &&
-        // relativeToPadCenterY > boundary201Y
-      ) {
-        // Top Left
-        handleSwipeColorChange(4);
-        setCurrentActionType(4);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY > boundary237Y) {
-            handleSwipeColorChange(4, 12);
-            setCurrentActionType(12);
-          } else {
-            handleSwipeColorChange(4, 13);
-            setCurrentActionType(13);
-          }
-        }
-      } else {
-        // setSwipeColorDict(defaultColors);
-        handleSwipeColorChange(5);
-        setCurrentActionType(5);
-        if (!inMiddleCircle) {
-          if (relativeToPadCenterY < boundary309Y) {
-            handleSwipeColorChange(5, 14);
-            setCurrentActionType(14);
-          } else {
-            handleSwipeColorChange(5, 15);
-            setCurrentActionType(15);
-          }
+    } else if (
+      relativeToPadCenterY > boundary57Y &&
+      relativeToPadCenterY > boundary129Y
+    ) {
+      // Bottom (sector 2)
+      handleSwipeColorChange(2);
+      setCurrentActionType(2);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary93Y) {
+          handleSwipeColorChange(2, 8);
+          setCurrentActionType(8);
+        } else {
+          handleSwipeColorChange(2, 9);
+          setCurrentActionType(9);
         }
       }
     }
-  });
+    //
+    else if (
+      // relativeToPadCenterY < -boundary231Y &&
+      relativeToPadCenterY > boundary201Y
+    ) {
+      // Left
+      handleSwipeColorChange(3);
+      setCurrentActionType(3);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary165Y) {
+          // line that splits the the outer sectors and cuts the middle sector in half
+          handleSwipeColorChange(3, 10);
+          setCurrentActionType(10);
+        } else {
+          handleSwipeColorChange(3, 11);
+          setCurrentActionType(11);
+        }
+      }
+    }
+    //
+    else if (
+      relativeToPadCenterY < boundary273Y
+      // &&
+      // relativeToPadCenterY > boundary201Y
+    ) {
+      // Top Left
+      handleSwipeColorChange(4);
+      setCurrentActionType(4);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > boundary237Y) {
+          handleSwipeColorChange(4, 12);
+          setCurrentActionType(12);
+        } else {
+          handleSwipeColorChange(4, 13);
+          setCurrentActionType(13);
+        }
+      }
+    } else {
+      // setSwipeColorDict(defaultColors);
+      handleSwipeColorChange(5);
+      setCurrentActionType(5);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY < boundary309Y) {
+          handleSwipeColorChange(5, 14);
+          setCurrentActionType(14);
+        } else {
+          handleSwipeColorChange(5, 15);
+          setCurrentActionType(15);
+        }
+      }
+    }
+  };
+
+  const logicFourTwelveCircle = (
+    relativeToPadCenterX,
+    relativeToPadCenterY,
+    inMiddleCircle
+  ) => {
+    // Y dependent
+    const boundary15Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 15); // ? parts to circle, 15 degrees
+    // const boundary30Y =
+    //   relativeToPadCenterX * Math.tan((Math.PI / 180) * (360 / 12)); // 12 parts to circle
+    const boundary45Y = relativeToPadCenterX * Math.tan((Math.PI / 180) * 45); // 8 parts to circle 45 = 360/8
+    // X dependent
+    const boundary75X =
+      relativeToPadCenterY * (1 / Math.tan((Math.PI / 180) * 75));
+
+    if (Math.abs(relativeToPadCenterY) < boundary45Y) {
+      // Right side
+      handleSwipeColorChange(1);
+      setCurrentActionType(1);
+      if (!inMiddleCircle) {
+        if (-relativeToPadCenterY > boundary15Y) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(1, 16);
+          setCurrentActionType(16);
+        } else if (Math.abs(relativeToPadCenterY) < boundary15Y) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(1, 5);
+          setCurrentActionType(5);
+        } else {
+          handleSwipeColorChange(1, 6);
+          setCurrentActionType(6);
+        }
+      }
+    } else if (relativeToPadCenterY > Math.abs(boundary45Y)) {
+      // Bottom
+      handleSwipeColorChange(2);
+      setCurrentActionType(2);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterX > boundary75X) {
+          handleSwipeColorChange(2, 7);
+          setCurrentActionType(7);
+        } else if (Math.abs(relativeToPadCenterX) < boundary75X) {
+          handleSwipeColorChange(2, 8);
+          setCurrentActionType(8);
+        } else {
+          handleSwipeColorChange(2, 9);
+          setCurrentActionType(9);
+        }
+      }
+    } else if (relativeToPadCenterY > boundary45Y) {
+      // Left
+      handleSwipeColorChange(3);
+      setCurrentActionType(3);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterY > Math.abs(boundary15Y)) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(3, 10);
+          setCurrentActionType(10);
+        } else if (relativeToPadCenterY > boundary15Y) {
+          // setSwipeColorDict(defaultColors);
+          handleSwipeColorChange(3, 11);
+          setCurrentActionType(11);
+        } else {
+          handleSwipeColorChange(3, 12);
+          setCurrentActionType(12);
+        }
+      }
+    } else if (relativeToPadCenterY < boundary45Y) {
+      // Top
+      handleSwipeColorChange(4);
+      setCurrentActionType(4);
+      if (!inMiddleCircle) {
+        if (relativeToPadCenterX < boundary75X) {
+          handleSwipeColorChange(4, 13);
+          setCurrentActionType(13);
+        } else if (relativeToPadCenterX < Math.abs(boundary75X)) {
+          handleSwipeColorChange(4, 14);
+          setCurrentActionType(14);
+        } else {
+          handleSwipeColorChange(4, 15);
+          setCurrentActionType(15);
+        }
+      }
+    } else {
+      setSwipeColorDict(defaultColors);
+    }
+  };
 
   const gestureSwipeOnEnd = Gesture.Pan().onEnd((event) => {
     const { x, y, translationX, translationY, absoluteX, absoluteY } = event;
